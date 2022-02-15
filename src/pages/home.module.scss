@@ -1,1 +1,50 @@
-// TODO
+.posts {
+  a {
+    display: block;
+
+    &:hover {
+      h1 {
+        color: var(--highlight);
+      }
+    }
+
+    &+a {
+      margin-top: 1.5rem;
+    }
+
+    h1 {
+      color: var(--heading);
+      font-size: 1.55rem;
+      margin-bottom: 0.45rem;
+    }
+
+    p {
+      color: var(--body);
+      padding-bottom: 1rem;
+      ;
+    }
+
+    span {
+      font-size: 0.90rem;
+      color: var(--info);
+
+      &+span {
+        margin-left: 20px;
+      }
+    }
+  }
+
+  &+button {
+    border: none;
+    background: none;
+    margin-top: 2.5rem;
+    color: var(--highlight);
+    font-weight: 600;
+    font-size: 1rem;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+}
