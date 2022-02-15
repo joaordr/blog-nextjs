@@ -5,12 +5,14 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import { RichText } from 'prismic-dom';
 import { FiCalendar, FiClock, FiUser } from 'react-icons/fi';
+import Link from 'next/link';
 import Prismic from '@prismicio/client';
 
 import { getPrismicClient } from '../../services/prismic';
 
 import commonStyles from '../../styles/common.module.scss';
 import styles from './post.module.scss';
+import Comments from '../../components/Comments';
 
 interface Post {
   first_publication_date: string | null;
@@ -31,10 +33,10 @@ interface Post {
 
 interface PostProps {
   post: Post;
+  preview: boolean;
 }
 
-export default function Post({ post }: PostProps): JSX.Element {
-  console.log(post.data);
+export default function Post({ post, preview }: PostProps): JSX.Element {
   const totalWords = post.data.content.reduce((total, contentItem) => {
     total += (contentItem.heading.split(' ').length);
     const words = contentItem.body.map(item => item.text.split(' ').length);
@@ -54,13 +56,13 @@ export default function Post({ post }: PostProps): JSX.Element {
       <main className={commonStyles.container}>
         <div className={styles.post}>
           <div className={styles.postTop}>
-            <h2>{post.data.title}</h2>
+            <h2>{post.data.title[0].text}</h2>
             <ul>
               <li>
                 <FiCalendar /> {format(new Date(post.first_publication_date), 'dd MMM yyyy', { locale: pt })}
               </li>
               <li>
-                <FiUser /> {post.data.author}
+                <FiUser /> {post.data.author[0].text}
               </li>
               <li>
                 <FiClock /> {`${readTime} min`}
@@ -79,6 +81,19 @@ export default function Post({ post }: PostProps): JSX.Element {
 
 
         </div>
+
+        {preview && (
+          <aside>
+            <Link href="/api/exit-preview">
+              <a href={commonStyles.preview}>
+                Sair do modo Preview
+              </a>
+            </Link>
+          </aside>
+        )}
+
+        <Comments />
+          
       </main>
     </>
 
@@ -105,10 +120,14 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps = async ({ params, previewData, preview = false }) => {
   const prismic = getPrismicClient();
   const { slug } = params;
-  const response = await prismic.getByUID('posts', String(slug), {});
+
+  const previewRef = previewData ? previewData.ref : null
+  const refOption = previewRef ? { ref: previewRef } : null
+
+  const response = await prismic.getByUID('posts', String(slug), refOption);
 
   const post = {
     uid: response.uid,
@@ -122,7 +141,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       author: response.data.author,
       content: response.data.content.map(data => {
         return {
-          heading: data.heading,
+          heading: data.heading[0].text,
           body: [...data.body],
         }
       })
@@ -132,6 +151,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   return {
     props: {
       post,
+      preview,
     },
   };
 

@@ -79,19 +79,19 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
           return (
             <Link key={post.uid} href={`/post/${post.uid}`}>
               {/* TESTE */}
-              <a>
+              {/* <a>
                 <h1>{post.data.title}</h1>
                 <p>{post.data.subtitle}</p>
                 <span><FiCalendar /> {post.first_publication_date}</span>
                 <span><FiUser /> {post.data.author}</span><br />
-              </a>
+              </a> */}
 
-              {/* <a>
+              <a>
                 <h1>{RichText.asText(post.data.title)}</h1>
                 <p>{RichText.asText(post.data.subtitle)}</p>
                 <span><FiCalendar /> {post.first_publication_date}</span>
                 <span><FiUser /> {RichText.asText(post.data.author)}</span><br />
-              </a> */}
+              </a>
             </Link>
           )
         })}
