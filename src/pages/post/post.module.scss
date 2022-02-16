@@ -21,7 +21,7 @@
   }
 
   p {
-      color: var(--body);
+    color: var(--body);
   }
 
   a {
@@ -45,6 +45,16 @@
 }
 
 .postTop {
+  margin-bottom: 4rem;
+
+  span {
+    color: var(--info);
+    margin-top: 0.35rem;
+    display: block;
+    font-style: italic;
+    font-size: 0.875rem;
+  }
+
   >h1 {
     font-size: 3rem;
   }
@@ -54,7 +64,6 @@
     margin: 0;
     list-style: none;
     display: flex;
-    margin-bottom: 4rem;
 
     li {
       margin: 0;
@@ -70,4 +79,30 @@
 
     }
   }
+}
+
+.navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #282c34;
+  padding-top: 2rem;
+
+  h3 {
+    font-size: 1.125rem;
+    font-weight: 400;
+    color: var(--heading);
+    padding-bottom: 0.5rem;
+  }
+
+  a {
+    color: var(--highlight);
+    font-weight: 600;
+
+  }
+
+  div+div {
+    text-align: right;
+  }
+
 }
